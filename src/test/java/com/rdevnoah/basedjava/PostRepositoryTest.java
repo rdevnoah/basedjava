@@ -68,4 +68,19 @@ public class PostRepositoryTest {
         assertThat(spring).isEqualTo(1);
     }
 
+    @Test
+    public void 커스텀레포지토리테스트() {
+        Post post = new Post();
+        Comment comment = new Comment();
+        comment.setTitle("comment title......");
+
+        post.addComment(comment);
+        postRepository.save(post);
+
+        List<Post> resultPost = postRepository.findMyPost();
+
+        assertThat(resultPost.size()).isEqualTo(1);
+
+    }
+
 }
