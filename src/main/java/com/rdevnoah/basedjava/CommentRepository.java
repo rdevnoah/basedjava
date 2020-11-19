@@ -10,4 +10,6 @@ public interface CommentRepository {
     Comment save(Comment comment);
 
     List<Comment> findAll();
+
+    List<Comment> findByTitleContains(String keyword);
 }

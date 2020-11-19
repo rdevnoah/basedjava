@@ -25,4 +25,14 @@ public class CommentRepositoryTest {
         List<Comment> commentList = commentRepository.findAll();
         assertThat(commentList.size()).isEqualTo(1);
     }
+
+    @Test
+    public void 포함여부테스트() {
+        Comment comment = new Comment();
+        comment.setTitle("spring data jpa");
+        commentRepository.save(comment);
+
+        List<Comment> comments = commentRepository.findByTitleContains("spring");
+        assertThat(comments.size()).isEqualTo(1);
+    }
 }
