@@ -1,6 +1,7 @@
 package com.rdevnoah.basedjava;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -13,21 +14,25 @@ import javax.persistence.PersistenceContext;
 @Transactional
 public class JpaRunner implements ApplicationRunner {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    @Autowired
+    PostRepository postRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Post post = new Post();
-        post.setTitle("this is title...");
+
+        post.setTitle("this is post title...");
 
         Comment comment = new Comment();
-        comment.setTitle("comment title...");
+        comment.setTitle("this is comment title...");
         post.addComment(comment);
 
-        Session session = entityManager.unwrap(Session.class);
+        Comment comment2 = new Comment();
+        comment2.setTitle("this is comment title2....");
+        post.addComment(comment2);
 
-        session.save(post);
-        //session.save(comment);
+        postRepository.save(post);
+
+        postRepository.findAll().forEach(System.out::println);
     }
 }
