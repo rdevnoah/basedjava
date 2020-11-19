@@ -6,23 +6,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Study {
+public class Comment {
 
     @Id @GeneratedValue
     private Long id;
 
-    private String name;
+    private String title;
 
     @ManyToOne
-    private Account owner;
-
-    public Account getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Account owner) {
-        this.owner = owner;
-    }
+    private Post post;
 
     public Long getId() {
         return id;
@@ -32,12 +24,19 @@ public class Study {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 }

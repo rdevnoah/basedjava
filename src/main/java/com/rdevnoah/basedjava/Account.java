@@ -15,7 +15,7 @@ public class Account {
 
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "owner")
     private Set<Study> studies = new HashSet<>();
 
 
@@ -65,5 +65,15 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addStudy(Study study) {
+        this.studies.add(study);
+        study.setOwner(this);
+    }
+
+    public void removeStudy(Study study) {
+        this.studies.remove(study);
+        study.setOwner(null);
     }
 }
