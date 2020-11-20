@@ -11,7 +11,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -114,4 +116,46 @@ public class PostRepositoryTest {
 
     }
 
+
+    @Test
+    public void 쿼리메소드테스트() {
+
+        // Given
+        Set<Post> postList = new HashSet<Post>();
+
+        Post post = new Post();
+        post.setTitle("test test 1");
+
+        Post post2 = new Post();
+        post2.setTitle("test test 2");
+
+        Post post3 = new Post();
+        post3.setTitle("noah test 3");
+
+        postList.add(post);
+        postList.add(post2);
+        postList.add(post3);
+
+        postRepository.saveAll(postList);
+
+
+        // When
+        List<Post> resultList = postRepository.findByTitleStartsWith("test");
+
+        // Then
+        resultList.forEach(System.out::println);
+        assertThat(resultList.size()).isEqualTo(2);
+
+    }
+
+    @Test
+    public void namedQueryTest() {
+        Post post = new Post();
+        post.setTitle("rdevnoah");
+        postRepository.save(post);
+
+        List<Post> postList = postRepository.findByTitleNamedQuery("rdevnoah");
+        postList.forEach(System.out::println);
+        assertThat(postList.size()).isEqualTo(1);
+    }
 }

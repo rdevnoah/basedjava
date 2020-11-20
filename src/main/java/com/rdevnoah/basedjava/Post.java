@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = "Post.findByTitleNamedQuery", query = "SELECT p from Post as p where p.title=?1")
 public class Post {
     @Id @GeneratedValue
     private Long id;
