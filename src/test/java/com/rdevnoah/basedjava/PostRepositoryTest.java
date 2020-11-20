@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +22,9 @@ public class PostRepositoryTest {
 
     @Autowired
     PostRepository postRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Test
     public void crudRepository() {
@@ -86,7 +91,21 @@ public class PostRepositoryTest {
     public void 저장테스트() {
         Post post = new Post();
         post.setTitle("jpa noah kim");
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);      // persistent context에 persis 함. 그리고 persist 상태의 객체를 리턴함.
+
+        assertThat(entityManager.contains(post)).isTrue();          // 저장되어, persis화 되었으므로 true
+        assertThat(entityManager.contains(savedPost)).isTrue();     // persist화 되어 persistent context에서 가져왔으므로 true
+        assertThat(post == savedPost);                       // 두개는 같을수도 있고, 다를 수도 있지만, 여기서는 같은 레퍼런스임.
+
+        Post updatePost = new Post();
+        updatePost.setId(post.getId());             // id 값 이미 있는 것이므로
+        updatePost.setTitle("updated jpa noah kim");
+
+        // persistent context에 **merge** 됨. 그리고 persist 상태의 객체를 리턴함. 매개변수의 개체는 merge 된 객체이므로 persist 상태는 아님
+        Post finalUpdatedPost = postRepository.save(updatePost);
+
+        // persist 상태의 객체를 사용하면 update 가 자동으로 일어난다.
+        finalUpdatedPost.setTitle("check updated");
 
         List<Post> postList = postRepository.findAll();
 
