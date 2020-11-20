@@ -22,7 +22,6 @@ public class PostRepositoryTest {
     PostRepository postRepository;
 
     @Test
-    @Rollback(false)
     public void crudRepository() {
         // Given
         Post post = new Post();
@@ -80,6 +79,19 @@ public class PostRepositoryTest {
         List<Post> resultPost = postRepository.findMyPost();
 
         assertThat(resultPost.size()).isEqualTo(1);
+
+    }
+
+    @Test
+    public void 저장테스트() {
+        Post post = new Post();
+        post.setTitle("jpa noah kim");
+        postRepository.save(post);
+
+        List<Post> postList = postRepository.findAll();
+
+        postList.forEach(System.out::println);
+        assertThat(postList.size()).isEqualTo(1);
 
     }
 
