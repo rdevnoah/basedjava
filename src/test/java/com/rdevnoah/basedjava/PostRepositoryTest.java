@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -155,6 +157,21 @@ public class PostRepositoryTest {
         postRepository.save(post);
 
         List<Post> postList = postRepository.findByTitleNamedQuery("rdevnoah");
+        postList.forEach(System.out::println);
+        assertThat(postList.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void 정렬테스트() {
+        Post post = new Post();
+        post.setTitle("rdevnoah");
+        postRepository.save(post);
+
+        Post post2 = new Post();
+        post2.setTitle("rdevnoah2");
+        postRepository.save(post2);
+
+        List<Post> postList = postRepository.findByTitleNamedQuerySort("rdevnoah", Sort.by("title"));
         postList.forEach(System.out::println);
         assertThat(postList.size()).isEqualTo(1);
     }
